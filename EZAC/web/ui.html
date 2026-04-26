@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EZAC Admin</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+  <div id="root" class="root">
+    <div class="panel">
+      <header class="header">
+        <img src="img/ezac-logo.png" alt="EZAC" class="logo-img" id="logoImg" onerror="this.style.display='none'; var t=document.getElementById('logoText'); if(t) t.style.display='inline';">
+        <span class="logo-text" id="logoText" style="display:none;">EZAC</span>
+        <span class="title">Admin Menu</span>
+        <button type="button" class="btn-close" id="btnClose" aria-label="Close"><i class="fa-solid fa-times"></i></button>
+      </header>
+
+      <div class="main-layout">
+        <nav class="sidebar" id="sidebar">
+          <button type="button" class="nav-item active" data-tab="players"><i class="fa-solid fa-users"></i><span>Players</span></button>
+          <button type="button" class="nav-item" data-tab="teleport"><i class="fa-solid fa-location-crosshairs"></i><span>Teleport</span></button>
+          <button type="button" class="nav-item" data-tab="vehicle"><i class="fa-solid fa-car"></i><span>Vehicle</span></button>
+          <button type="button" class="nav-item" data-tab="self"><i class="fa-solid fa-bolt"></i><span>Self</span></button>
+          <button type="button" class="nav-item" data-tab="fun"><i class="fa-solid fa-wand-magic-sparkles"></i><span>Fun</span></button>
+          <button type="button" class="nav-item" data-tab="visual"><i class="fa-solid fa-eye"></i><span>Visual</span></button>
+          <button type="button" class="nav-item" data-tab="world"><i class="fa-solid fa-globe"></i><span>World</span></button>
+          <button type="button" class="nav-item" data-tab="resources"><i class="fa-solid fa-cube"></i><span>Resources</span></button>
+          <button type="button" class="nav-item" data-tab="anticheat"><i class="fa-solid fa-shield-halved"></i><span>Anti Cheat</span></button>
+          <button type="button" class="nav-item" data-tab="dev"><i class="fa-solid fa-bug"></i><span>Dev</span></button>
+          <button type="button" class="nav-item" data-tab="console"><i class="fa-solid fa-terminal"></i><span>Console</span></button>
+        </nav>
+
+        <main class="content">
+          <section id="tab-players" class="tab-pane active">
+            <div class="search-wrap">
+              <input type="text" id="playerSearch" class="input" placeholder="Search by ID, name, Discord…" autocomplete="off">
+            </div>
+            <div class="table-wrap">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th></th>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Discord</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody id="playerList"></tbody>
+              </table>
+            </div>
+          </section>
+
+          <section id="tab-teleport" class="tab-pane">
+            <div class="block block-buttons">
+              <button type="button" class="btn btn-primary btn-block" id="btnWaypoint"><i class="fa-solid fa-map-pin"></i> Teleport to Marker</button>
+              <button type="button" class="btn btn-secondary btn-block" id="btnTeleportBack"><i class="fa-solid fa-rotate-left"></i> Teleport Back</button>
+              <button type="button" class="btn btn-secondary btn-block" id="btnCopyCoords"><i class="fa-solid fa-copy"></i> Copy Coordinates</button>
+            </div>
+            <div class="block">
+              <label class="block-label">Go to Coords</label>
+              <div class="coord-row">
+                <input type="text" id="coordX" class="input coord-input" placeholder="X" autocomplete="off">
+                <input type="text" id="coordY" class="input coord-input" placeholder="Y" autocomplete="off">
+                <input type="text" id="coordZ" class="input coord-input" placeholder="Z" autocomplete="off">
+                <button type="button" class="btn btn-primary" id="btnGoToCoords">Go</button>
+              </div>
+            </div>
+          </section>
+
+          <section id="tab-vehicle" class="tab-pane">
+            <div class="block block-buttons">
+              <button type="button" class="btn btn-primary btn-block" id="btnAdminCar"><i class="fa-solid fa-car"></i> Admin Car</button>
+            </div>
+            <div class="block">
+              <label class="block-label">Spawn Vehicle</label>
+              <div class="spawn-row">
+                <input type="text" id="spawnModel" class="input" placeholder="e.g. adder" autocomplete="off">
+                <button type="button" class="btn btn-primary" id="btnSpawnVehicle">Spawn</button>
+              </div>
+            </div>
+            <div class="block block-buttons">
+              <button type="button" class="btn btn-secondary btn-block" id="btnRepairVehicle"><i class="fa-solid fa-wrench"></i> Repair</button>
+              <button type="button" class="btn btn-secondary btn-block" id="btnVehicleBoost"><i class="fa-solid fa-gauge-high"></i> Boost</button>
+              <button type="button" class="btn btn-secondary btn-block" id="btnVehicleDelete"><i class="fa-solid fa-trash"></i> Delete Vehicle</button>
+              <button type="button" class="btn btn-secondary btn-block" id="btnMaxMods"><i class="fa-solid fa-sliders"></i> Max Vehicle Mods</button>
+            </div>
+            <div class="block">
+              <label class="block-label">Change Plate</label>
+              <div class="spawn-row">
+                <input type="text" id="plateInput" class="input" placeholder="New plate (max 8)" maxlength="8" autocomplete="off">
+                <button type="button" class="btn btn-primary" id="btnChangePlate">Set</button>
+              </div>
+            </div>
+          </section>
+
+          <section id="tab-self" class="tab-pane">
+            <div class="block">
+              <label class="block-label">Modes</label>
+              <div class="toggle-row">
+                <label class="toggle-label"><input type="checkbox" id="godmode" class="toggle-cb" data-mode="godmode"><span class="toggle-pill"></span><span>God Mode</span></label>
+                <label class="toggle-label"><input type="checkbox" id="noclip" class="toggle-cb" data-mode="noclip"><span class="toggle-pill"></span><span>NoClip</span></label>
+                <label class="toggle-label"><input type="checkbox" id="superjump" class="toggle-cb" data-mode="superjump"><span class="toggle-pill"></span><span>Super Jump</span></label>
+                <label class="toggle-label"><input type="checkbox" id="invisible" class="toggle-cb" data-mode="invisible"><span class="toggle-pill"></span><span>Invisible</span></label>
+              </div>
+            </div>
+            <div class="block block-buttons">
+              <button type="button" class="btn btn-primary btn-block" id="btnHeal"><i class="fa-solid fa-heart-pulse"></i> Heal (200)</button>
+              <button type="button" class="btn btn-primary btn-block" id="btnArmour"><i class="fa-solid fa-shield"></i> Armour (100)</button>
+            </div>
+            <div class="block block-buttons">
+              <button type="button" class="btn btn-secondary btn-block" id="btnToggleCoords"><i class="fa-solid fa-crosshairs"></i> Toggle Coords</button>
+              <button type="button" class="btn btn-secondary btn-block" id="btnToggleBlips"><i class="fa-solid fa-map-location-dot"></i> Toggle Blips</button>
+            </div>
+          </section>
+
+          <section id="tab-visual" class="tab-pane">
+            <div class="toggle-row wrap">
+              <label class="toggle-label"><input type="checkbox" class="toggle-cb" data-esp="boxes"><span class="toggle-pill"></span><span>Boxes</span></label>
+              <label class="toggle-label"><input type="checkbox" class="toggle-cb" data-esp="names"><span class="toggle-pill"></span><span>Names</span></label>
+              <label class="toggle-label"><input type="checkbox" class="toggle-cb" data-esp="lines"><span class="toggle-pill"></span><span>Tracers</span></label>
+              <label class="toggle-label"><input type="checkbox" class="toggle-cb" data-esp="skeleton"><span class="toggle-pill"></span><span>Skeletons</span></label>
+              <label class="toggle-label"><input type="checkbox" class="toggle-cb" data-esp="object"><span class="toggle-pill"></span><span>Scanner</span></label>
+            </div>
+          </section>
+
+          <section id="tab-world" class="tab-pane">
+            <div class="block block-buttons">
+              <button type="button" class="btn btn-secondary btn-block" data-action="deleteVehicles"><i class="fa-solid fa-car"></i> Delete Vehicles</button>
+              <button type="button" class="btn btn-secondary btn-block" data-action="deletePeds"><i class="fa-solid fa-person"></i> Delete Peds</button>
+              <button type="button" class="btn btn-secondary btn-block" data-action="deleteObjects"><i class="fa-solid fa-cube"></i> Delete Objects</button>
+              <button type="button" class="btn btn-danger btn-block" data-action="deleteAll"><i class="fa-solid fa-bomb"></i> Delete All</button>
+            </div>
+            <div class="block">
+              <label class="block-label">Announcement</label>
+              <div class="announce-row">
+                <input type="text" id="announceMsg" class="input" placeholder="Message to all players" autocomplete="off">
+                <button type="button" class="btn btn-primary" id="btnAnnounce">Send</button>
+              </div>
+            </div>
+          </section>
+
+          <section id="tab-resources" class="tab-pane">
+            <div class="search-wrap">
+              <input type="text" id="resourceSearch" class="input" placeholder="Search resources…" autocomplete="off">
+            </div>
+            <div class="table-wrap">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>State</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody id="resourceList"></tbody>
+              </table>
+            </div>
+          </section>
+
+          <section id="tab-anticheat" class="tab-pane">
+            <div class="block">
+              <label class="block-label">Unban by Ban ID</label>
+              <div class="unban-row">
+                <input type="text" id="unbanId" class="input" placeholder="Ban ID" autocomplete="off">
+                <button type="button" class="btn btn-primary" id="btnUnban">Unban</button>
+              </div>
+            </div>
+            <div class="block block-buttons">
+              <button type="button" class="btn btn-secondary btn-block" id="btnRefreshBans"><i class="fa-solid fa-rotate"></i> Refresh Bans</button>
+              <button type="button" class="btn btn-secondary btn-block" id="btnEntityCleanup"><i class="fa-solid fa-broom"></i> Entity Cleanup (All)</button>
+            </div>
+          </section>
+
+          <section id="tab-fun" class="tab-pane">
+            <div class="block block-buttons">
+              <button type="button" class="btn btn-secondary btn-block" id="btnReviveAll"><i class="fa-solid fa-notes-medical"></i> Revive All</button>
+              <button type="button" class="btn btn-secondary btn-block" id="btnReviveRadius"><i class="fa-solid fa-circle-radiation"></i> Revive Radius</button>
+              <button type="button" class="btn btn-secondary btn-block" id="btnVehicleDevMenu"><i class="fa-solid fa-car-side"></i> Vehicle Dev Menu</button>
+            </div>
+            <div class="block">
+              <label class="block-label">Set Bucket</label>
+              <div class="spawn-row">
+                <input type="number" id="bucketInput" class="input" placeholder="Bucket ID (0=global)" min="0" value="0" autocomplete="off">
+                <button type="button" class="btn btn-primary" id="btnSetBucket">Set</button>
+              </div>
+            </div>
+          </section>
+
+          <section id="tab-dev" class="tab-pane">
+            <div class="block">
+              <label class="toggle-label" style="margin-bottom:12px">
+                <input type="checkbox" id="devDebugToggle" class="toggle-cb">
+                <span class="toggle-pill"></span>
+                <span>Dev Debug Mode (raycast)</span>
+              </label>
+              <button type="button" class="btn btn-primary btn-block" id="btnDevDebugScan"><i class="fa-solid fa-magnifying-glass"></i> Scan Entity</button>
+              <p class="block-hint">Close menu → aim at entity → press E. Info appears left-center. Esc to close.</p>
+            </div>
+          </section>
+
+          <section id="tab-console" class="tab-pane">
+            <div id="consoleOutput" class="console-output hide-scrollbar"></div>
+          </section>
+        </main>
+      </div>
+    </div>
+
+    <!-- Identifiers modal -->
+    <div id="identifiersModal" class="modal-overlay" hidden>
+      <div class="modal modal-identifiers">
+        <button type="button" class="btn-close modal-close-abs" id="identifiersModalClose" aria-label="Close"><i class="fa-solid fa-times"></i></button>
+        <div class="modal-body modal-body-scroll">
+          <p class="modal-hint">Copy any identifier below.</p>
+          <ul id="identifiersList" class="identifiers-list"></ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Actions modal -->
+    <div id="actionsModal" class="modal-overlay" hidden>
+      <div class="modal modal-actions">
+        <div class="modal-header">
+          <span id="actionsModalName" class="modal-title"></span>
+          <span id="actionsModalId" class="meta-badge"></span>
+          <button type="button" class="btn-close" id="actionsModalClose"><i class="fa-solid fa-times"></i></button>
+        </div>
+        <div class="modal-body">
+          <div class="action-row">
+            <label class="action-label">DM</label>
+            <div class="action-input-row">
+              <input type="text" id="actionsMessage" class="input" placeholder="Message to player">
+              <button type="button" class="btn btn-secondary" data-action="dm"><i class="fa-solid fa-message"></i> Send</button>
+            </div>
+          </div>
+          <div class="actions-instant">
+            <button type="button" class="btn btn-secondary" data-action="goto"><i class="fa-solid fa-arrow-right-to-bracket"></i> Goto</button>
+            <button type="button" class="btn btn-secondary" data-action="bring"><i class="fa-solid fa-hand-holding"></i> Bring</button>
+            <button type="button" class="btn btn-secondary" data-action="spectate"><i class="fa-solid fa-video"></i> Spectate</button>
+            <button type="button" class="btn btn-secondary" data-action="freeze"><i class="fa-solid fa-snowflake"></i> Freeze</button>
+            <button type="button" class="btn btn-secondary" data-action="sitInVehicle"><i class="fa-solid fa-car"></i> Sit in Vehicle</button>
+            <button type="button" class="btn btn-secondary" data-action="revivePlayer"><i class="fa-solid fa-heart-pulse"></i> Revive</button>
+            <button type="button" class="btn btn-secondary" data-action="kill"><i class="fa-solid fa-skull"></i> Kill</button>
+            <button type="button" class="btn btn-secondary" data-action="explode"><i class="fa-solid fa-bomb"></i> Explode</button>
+            <button type="button" class="btn btn-secondary" data-action="makeDrunk"><i class="fa-solid fa-wine-bottle"></i> Make Drunk</button>
+            <button type="button" class="btn btn-secondary" data-action="setPlayerPed" data-needs-input="pedModel"><i class="fa-solid fa-person"></i> Set Ped</button>
+            <button type="button" class="btn btn-secondary" data-action="screenshot"><i class="fa-solid fa-camera"></i> Screenshot</button>
+            <button type="button" class="btn btn-secondary" data-action="warn" data-needs-reason="1"><i class="fa-solid fa-triangle-exclamation"></i> Warn</button>
+            <button type="button" class="btn btn-secondary" data-action="kick" data-needs-reason="1"><i class="fa-solid fa-door-open"></i> Kick</button>
+            <button type="button" class="btn btn-danger" data-action="ban" data-needs-reason="1"><i class="fa-solid fa-ban"></i> Ban</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Reason input modal (Warn/Kick/Ban) -->
+    <div id="reasonModal" class="modal-overlay" hidden>
+      <div class="modal modal-reason">
+        <div class="modal-header">
+          <h3 id="reasonModalTitle">Reason</h3>
+          <button type="button" class="btn-close" id="reasonModalClose"><i class="fa-solid fa-times"></i></button>
+        </div>
+        <div class="modal-body">
+          <input type="text" id="reasonModalInput" class="input" placeholder="Required">
+          <button type="button" class="btn btn-primary btn-block" id="reasonModalSubmit">Submit</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Input modal (Set Ped, etc.) -->
+    <div id="inputModal" class="modal-overlay" hidden>
+      <div class="modal modal-reason">
+        <div class="modal-header">
+          <h3 id="inputModalTitle">Input</h3>
+          <button type="button" class="btn-close" id="inputModalClose"><i class="fa-solid fa-times"></i></button>
+        </div>
+        <div class="modal-body">
+          <input type="text" id="inputModalInput" class="input" placeholder="">
+          <button type="button" class="btn btn-primary btn-block" id="inputModalSubmit">Submit</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast container (center-right, ox_lib style, EZAC themed) -->
+  <div id="toastContainer" class="toast-container"></div>
+
+  <!-- Dev Debug panel (left-center, shown when raycast returns data) -->
+  <div id="devDebugPanel" class="dev-debug-panel" hidden>
+    <div class="dev-debug-panel-inner">
+      <div class="dev-debug-header">
+        <span>Entity Info</span>
+        <button type="button" class="btn-close btn-close-sm" id="devDebugClose"><i class="fa-solid fa-times"></i></button>
+      </div>
+      <pre id="devDebugContent" class="dev-debug-content"></pre>
+      <p class="dev-debug-hint">Press <kbd>Esc</kbd> to close</p>
+    </div>
+  </div>
+
+  <script src="screenshare.js"></script>
+  <script src="ui.js"></script>
+</body>
+</html>
